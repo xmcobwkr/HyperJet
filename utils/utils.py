@@ -13,7 +13,7 @@ def get_gpu():
 
 
 class CustomException(Exception):
-    def __init__(self, message="发生了自定义异常"):
+    def __init__(self, message="Custom exception occurred"):
         self.message = message
         super().__init__(self.message)
 
@@ -29,7 +29,6 @@ def get_transmission_info(task):
 
 
 def min_max_normalization(x, max_value, min_value):
-    # 最大最小归一化
     return (x - min_value) / (max_value - min_value)
 
 
@@ -64,9 +63,8 @@ def topsort_with_time_and_energy(id2tasks, edges, resources):
             if deg[v] == 0:
                 heapq.heappush(heap, (max_rew[v], v))
 
-    assert len(task_sequence) == len(tasks), "出现环"
+    assert len(task_sequence) == len(tasks), "Appearance of cycles"
 
-    # 反向求最晚完成时间
     heap = []
     heapq.heapify(heap)
     rev_edges = {task.id: [] for task in tasks}
@@ -117,22 +115,13 @@ class DisablePrint:
 
 
 def test_exp():
-    # 示例
-    # try:
-    #     raise CustomException("这是一个自定义异常的消息")
-    # except CustomException as ce:
-    #     print(f"捕获到自定义异常: {ce}")
     def normalize_list(input_list):
-        # 找到列表中的最大值和最小值
         max_val = max(input_list)
         min_val = min(input_list)
-
-        # 对列表中的每个值进行归一化
         normalized_list = [(x - min_val) / (max_val - min_val) for x in input_list]
 
         return normalized_list
 
-    # 示例
     original_list = [2, 5, 8, 12, 4]
     normalized_list = normalize_list(original_list)
 
@@ -142,31 +131,24 @@ def test_exp():
 
 def interpolate_subarrays(arr, target_length):
     """
-    对二维数组的每个子数组进行插值，使得它们的长度都变为target_length。
+    Interpolate each subarray of the two-dimensional array so that their lengths become target_1ength.
 
     Parameters:
-    arr (list of list of float): 输入的二维数组
-    target_length (int): 目标长度
+    arr (list of list of float): Input two-dimensional array
+    target_length (int): target length
 
     Returns:
-    np.ndarray: 插值后的二维数组
+    np.ndarray: Interpolated two-dimensional array
     """
     interpolated_arr = []
 
     for subarray in arr:
-        # 获取当前子数组的长度
         current_length = len(subarray)
-
-        # 如果当前子数组的长度已经是目标长度，则无需插值
         if current_length == target_length:
             interpolated_arr.append(subarray)
             continue
-
-        # 创建一个表示当前子数组位置的数组
         current_positions = np.linspace(0, 1, current_length)
         target_positions = np.linspace(0, 1, target_length)
-
-        # 使用线性插值方法
         interpolator = interp1d(current_positions, subarray, kind='linear')
         interpolated_subarray = interpolator(target_positions)
 
@@ -175,7 +157,6 @@ def interpolate_subarrays(arr, target_length):
     return np.array(interpolated_arr)
 
 def get_mean(data):
-    # 二维数组求平均值
     mx_len = max([len(v) for v in data])
     data = interpolate_subarrays(data, mx_len)
     mean_data = [0] * len(data[0])

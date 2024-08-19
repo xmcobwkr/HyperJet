@@ -17,7 +17,8 @@ from .config.config import *
 
 class HypergraphData():
     """
-        超图数据集，包含了所有的超图数据，读取超图文件并将NUM_HG超图任务合并为一个超图样本作为输入数据的一部分
+        The hypergraph dataset contains all the hypergraph data.
+        Read the hypergraph file and merge the NUM-HG hypergraph task into one hypergraph sample as part of the input data
     """
 
     def __init__(self, paths):
@@ -25,20 +26,18 @@ class HypergraphData():
             paths = [paths]
 
         if not isinstance(paths, list):
-            raise CustomException("超图类的构造参数必须是文件路径或者是文件路径的列表")
+            raise CustomException("The construction parameters of hypergraph classes must be file paths or a list of file paths")
 
         for path in paths:
             if not os.path.exists(path):
-                raise CustomException(f"超图文件路径{path}不存在")
+                raise CustomException(f"The {path} of the hypergraph file does not exist")
 
         hypergraphs = []
-        for i in tqdm(range(0, len(paths), NUM_HG), desc="读取超图中...", unit="iter"):
+        for i in tqdm(range(0, len(paths), NUM_HG), desc="Read from the hypergraph...", unit="iter"):
             hypergraph_list = []
             for j in range(i, min(i + NUM_HG, len(paths))):
                 hypergraph_list.append(Hypergraph(path=paths[j]))
-            # 将NUM_HG个超图合并在一起作为一个样本
             union_hypergraph = Hypergraph(hypergraphs=hypergraph_list)
-            # 生成超边， 拓展超图
             union_hypergraph.generate_hyperedges(partitioning_k=NUM_RESOURCE_CLUSTER)
             hypergraphs.append(union_hypergraph)
         self._hypergraphs = hypergraphs
@@ -71,21 +70,21 @@ class Hypergraph():
         self._vis = None
         self._heap = []
         if path is None and hypergraphs is None:
-            raise CustomException(f"错误的超图初始化参数")
+            raise CustomException(f"Incorrect hypergraph initialization parameters")
         if path is not None:
             if not os.path.exists(path):
-                raise CustomException(f"超图文件路径{path}不存在")
+                raise CustomException(f"The {path} of the hypergraph file does not exist")
             self._parse_hypergraph_from_path(path)
         else:
             if isinstance(hypergraphs, Hypergraph):
                 hypergraphs = [hypergraphs]
 
             if not isinstance(hypergraphs, list):
-                raise CustomException(f"错误的超图初始化参数")
+                raise CustomException(f"Incorrect hypergraph initialization parameters")
 
             for hypergraph in hypergraphs:
                 if not isinstance(hypergraph, Hypergraph):
-                    raise CustomException(f"错误的超图初始化参数")
+                    raise CustomException(f"Incorrect hypergraph initialization parameters")
 
             self._parse_hypergraph_from_hypergraph(hypergraphs)
 
@@ -136,7 +135,6 @@ class Hypergraph():
         return self._prev_nodes[task_id]
 
     def cirti_prev(self, task_id):
-        """关键路径上的上一个节点，由元组列表组成，当这个节点在关键路径上时第二个元素为1，否则为0"""
         return self._pre[task_id]
 
 
@@ -148,7 +146,6 @@ class Hypergraph():
         heapq.heapify(self._heap)
         for task in self.tasks:
             if task.deg == 0:
-                """入度为0的点可以随时启动"""
                 heapq.heappush(self._heap, [0, task.topsort_id])
     def update_node(self, task_id, start_time):
         self._start_time[task_id] = max(self._start_time[task_id], start_time)
@@ -158,15 +155,10 @@ class Hypergraph():
 
 
     def next_node(self, task=None):
-        """
-        查询下一个任务
-        :param task: 当前的任务
-        :return: 下一个任务以及是否已经完成一次全部任务的卸载
-        """
         if task is None:
             if len(self._heap) == 0:
                 self.heap_reset()
-            assert len(self._heap), "堆未初始化"
+            assert len(self._heap), "Heap uninitialized"
             task_topsort_id = heapq.heappop(self._heap)[1]
             return self.task_sequence[task_topsort_id], False
         if len(self._heap) == 0:
@@ -175,10 +167,6 @@ class Hypergraph():
         return self.task_sequence[task_topsort_id], False
 
     def _get_next_nodes(self):
-        """
-        获取所有节点的后继节点
-        :return:
-        """
         _next_nodes = {task.id: [] for task in self.tasks}
         _prev_nodes = {task.id: [] for task in self.tasks}
         for edge in self.edges:
@@ -189,10 +177,6 @@ class Hypergraph():
         self._prev_nodes = _prev_nodes
 
     def _parse_hypergraph_from_path(self, path: str):
-        """
-        :param path: 超图的json文件
-        :return:
-        """
         with open(path, 'r') as f:
             data_dict = json.load(f)
             data = SimpleNamespace(**data_dict)
@@ -201,7 +185,6 @@ class Hypergraph():
 
             for _node in data.nodes:
                 node = SimpleNamespace(**_node)
-                # 暂时固定为1
                 # node.task_complexity = list(TASK_COMPLEXITIES.values())[int(node.task_complexity)]
                 node.task_complexity = list(TASK_COMPLEXITIES.values())[int(node.task_complexity)]
                 node.task_constant = TASK_CONSTANTS[node.task_constant]
@@ -235,11 +218,6 @@ class Hypergraph():
                 task.sorted_id = i
 
     def _parse_hypergraph_from_hypergraph(self, hypergraphs):
-        """
-        合并超图，直接基于编号合并
-        :param hypergraphs: 超图的列表
-        :return:
-        """
 
         _id2task = {}
         _id2edge = {}
@@ -264,12 +242,7 @@ class Hypergraph():
 
 
     def _parse_sequence_from_hypergraph(self):
-        """
-        通过拓扑排序将超图任务解析为序列
-        :return:
-        """
         self._get_next_nodes()
-        # 拓扑排序
         max_rew, min_rew, _task_sequence = topsort_with_time_and_energy(self._id2task, self._next_nodes, resources)
         self._pre = {task.id: [] for task in self.tasks}
         self._is_critical_path = {task.id: max_rew[task.id] == min_rew[task.id] for task in self.tasks}
@@ -281,29 +254,6 @@ class Hypergraph():
         for i, task_id in enumerate(_task_sequence):
             self._id2task[task_id].topsort_id = i
         self._task_sequence = [self._id2task[task_id] for task_id in _task_sequence]
-
-        # q = deque()
-        # _task_sequence = []
-        # degs = {task.id: task.deg for task in self._id2task.values()}
-        # for task in self._id2task.values():
-        #     if task.deg == 0:
-        #         q.append(task)
-        # cnt = 0
-        # while len(q) > 0:
-        #     task = q.popleft()
-        #     self._id2task[task.id].topsort_id = cnt
-        #     _task_sequence.append(task)
-        #     for next_task_id in self.next(task.id):
-        #         degs[next_task_id] -= 1
-        #         if degs[next_task_id] == 0:
-        #             q.append(self._id2task[next_task_id])
-        #     cnt += 1
-        #
-        # # 不出现环
-        # assert cnt == len(degs)
-        # self._task_sequence = _task_sequence
-
-        # 根据edge_list生成HG
         self._undirected_edge_list = [[self.id2topsort_id(node) for node in edge.nodes] for edge in self.edges]
         self._source_edge_list = [[self.id2topsort_id(edge.source)] for edge in self.edges if edge.type == 1]
         self._target_edge_list = [[self.id2topsort_id(edge.target)] for edge in self.edges if edge.type == 1]
@@ -348,11 +298,6 @@ class Hypergraph():
         return res
 
     def generate_hyperedges(self, neighborhood_k=2, kmeans_k=NUM_EDGE_CLUSTER, partitioning_k=NUM_EDGE_CLUSTER, partitioning_config=PARTITIONING_CONFIG):
-        """生成无向超边
-        1. 通过k邻域元素建立超边
-        2. 通过相近的num_operation建立超边
-        3. 通过超图分区建立超边
-        """
         edges_1, edges_2, edges_3 = [], [], []
 
         if USE_HG_EDGE[1] or USE_HG_EDGE[-1]:
@@ -367,7 +312,6 @@ class Hypergraph():
         if USE_HG_EDGE[2] or USE_HG_EDGE[-1]:
             from sklearn.cluster import KMeans
             X = np.array([[task.bandwidth_up, task.bandwidth_dl, task.load_energy_coefficient, task.num_operation] for task in self.tasks])
-            # 创建KMeans对象并进行聚类
             kmeans = KMeans(n_clusters=kmeans_k)
             kmeans.fit(X)
             labels = {label_id: [] for label_id in range(kmeans_k)}

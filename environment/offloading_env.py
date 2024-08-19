@@ -22,12 +22,9 @@ def _get_transmission_time(task):
 
 class OffloadingEnvironment(gym.Env):
     """
-        创建卸载的强化学习环境，环境需要制定状态，动作，奖励以及价值
-        需要的为输入的超图集合（包含了相应的节点，超边属性信息），资源池环境
-        状态需要超图的数据集以及当前的卸载情况
-        构造函数参数：
-            资源池环境：包含了资源池相关信息的环境
-            超图样本：包含了状态中所需要的一个样本
+        Create an unloaded reinforcement learning environment. The environment needs to formulate status, actions, rewards and values
+        What is required is the input hypergraph set (including the corresponding nodes and hyperedge attribute information), resource pool environment
+        The state requires the data set of the hypergraph and the current unloading status
     """
 
     def __init__(self, resources: Resources, hypergraph: Hypergraph, gnn_type=None, device=None, use_graph_state=False,
@@ -88,10 +85,7 @@ class OffloadingEnvironment(gym.Env):
 
     @property
     def init_state(self):
-        """初始化的状态，每次从起始节点卸载都会变初始化的状态"""
-        # 状态由节点数量由节点数量 * (超边数量 + 资源池数量 * 3（是否卸载对应资源池，时延，能耗） + 2(能耗，执行时间))，对于还没有卸载的节点的后2个元素应该使用掩码0覆盖
-        # 对于超边就是是否连接，对于资源池是如果卸载该节点时对应的时延和能耗，超边和资源池是初始化的状态就有，后2个则是需要通过action不断更新的
-        # 节点数量和超边数量都是固定的，多出删减，不够补全零信息的节点
+        """The initialization state will change every time you unload from the starting node"""
 
         if self._init_state is None:
             total_edges = NUM_HG * NUM_HG_EDGES if self.use_graph_state else 0
@@ -117,7 +111,7 @@ class OffloadingEnvironment(gym.Env):
 
     @property
     def reward(self):
-        """获取当前执行动作后的即时奖励"""
+        """Get instant rewards after the current action"""
         return self._reward
 
     @property
@@ -172,36 +166,11 @@ class OffloadingEnvironment(gym.Env):
     def energy(self):
         return self._energy[self._current_task.id]
 
-    # @property
-    # def max_exec_time(self):
-    #     return self._max_exec_time
-    #
-    # @property
-    # def min_exec_time(self):
-    #     return self._min_exec_time
-    #
-    # @property
-    # def min_total_time(self):
-    #     return self._min_total_time
-    #
-    # @property
-    # def max_total_time(self):
-    #     return self._max_total_time
-    #
-    # @property
-    # def max_energy(self):
-    #     return self._max_energy
-    #
-    # @property
-    # def min_energy(self):
-    #     return self._min_energy
-
     @property
     def HG(self):
         if self._HG is None and self._gnn_type is not None:
             _edge_list = self.hypergraph.undirected_edge_list
             def check_edge(edges):
-                # 去除超边中不在裁剪范围内的节点
                 edge_list = []
                 for edge in edges:
                     new_edge = []
@@ -237,29 +206,15 @@ class OffloadingEnvironment(gym.Env):
 
     @property
     def min_available_time_resource(self):
-        """贪心的选择"""
         return np.argmin(self._resource_available_time)
         # last_column = [row[-1] for row in self._resource_available_time]
         # return last_column.index(min(last_column))
 
 
     def reset(self, seed=None, options=None):
-        """
-        :return: 初始化的状态，以及相关的info
-        """
-        # self._max_time = {task.id: self.resources.get_max_time(task)[0] for task in self.hypergraph.tasks}
-        # self._min_time = {task.id: self.resources.get_min_time(task)[0] for task in self.hypergraph.tasks}
-        # self._max_energy = max(self.resources.get_max_energy(task)[0] for task in self.hypergraph.tasks)
-        # self._min_energy = min(self.resources.get_min_energy(task)[0] for task in self.hypergraph.tasks)
         for task in self.hypergraph.tasks:
             _id = task.id
             self._up_time[_id], self._dl_time[_id], self._up_energy[_id], self._dl_energy[_id] = get_transmission_info(task)
-        # self._max_exec_time = max(self._max_time.values())
-        # self._min_exec_time = min(self._min_time.values())
-        # self._max_total_time = max({ self._max_time[task.id] + self._up_time[task.id] + self._dl_time[task.id]
-        #                              for task in self.hypergraph.tasks})
-        # self._min_total_time = min({ self._min_time[task.id] + self._up_time[task.id] + self._dl_time[task.id]
-        #                              for task in self.hypergraph.tasks})
         
         self._state, self._reward = self._get_next_obs()
         self._global_clock = self._global_energy = 0
@@ -278,11 +233,7 @@ class OffloadingEnvironment(gym.Env):
         self._num_steps += 1
         self._num_offloading_steps += 1
         if self._num_offloading_steps >= len(self.hypergraph.tasks):
-            # print(self.state, self.reward, self.terminated, info)
-            # print(f"一轮已经结束, 已经做出的决策数量：{self._num_steps}, 目前的卸载的总时间:{self._global_clock}, "
-            #       f"目前的节点{self.current_task.id}, 总时延{self.end_time}, 总能耗{sum(self._energy.values())}")
             self._terminated = True
-        """gymnasium相较于gym需要多返回一个truncated表示是否人为截断，这里始终为False"""
         return self.state, self.reward, self.terminated, False, self.info
 
     def update_time_and_energy_weight(self, time_weight, energy_weight):
@@ -310,10 +261,6 @@ class OffloadingEnvironment(gym.Env):
 
 
     def _offloading_computation(self, task, action):
-        """
-        根据动作计算卸载产生的时延，能耗
-        :param actions: 动作
-        """
         hypergraph, resources = self.hypergraph, self.resources
         # 获取时延，能耗
         exec_time = resources.get_time(task, action)
@@ -332,15 +279,9 @@ class OffloadingEnvironment(gym.Env):
             hypergraph.update_node(next_task_id, self.end_time)
 
     def _get_next_obs(self, action=None):
-        """
-        根据当前的状态采取动作得到下一个状态，即时奖励
-        :param action: 动作
-        :return: 下一个状态，即时奖励
-        """
         hypergraph, resources = self.hypergraph, self.resources
 
         if action is None or self._terminated:
-            """无动作表示环境的初始化，停止了一轮游戏说明已经完成了所有任务的卸载"""
             self._state = self.init_state
             self._offloading_reset()
             self._current_task, self._terminated = hypergraph.next_node(self.current_task)
@@ -349,29 +290,14 @@ class OffloadingEnvironment(gym.Env):
 
         task_topsort_id = self.current_task.topsort_id
         if task_topsort_id + 1 == self.state.shape[0]:
-            """需要再判断是否超过了state的固定节点数量，超出需要抛弃"""
             self._terminated = True
 
         self._offloading_computation(self.current_task, action)
-
-        # 计算除了task的最晚完成时间
-        # max_end_time_exc = max(
-        #     [0 if task.id == self.current_task.id else self._end_time[task.id] for task in self.hypergraph.tasks])
         max_end_time_exc = max([self._end_time[task_id] for task_id in self.hypergraph.cirti_prev(self.current_task.id)]) if \
             len(self.hypergraph.cirti_prev(self.current_task.id)) > 0 else 0
 
         max_energy_exc = max(
             [0 if task.id == self.current_task.id else self._energy[task.id] for task in self.hypergraph.tasks])
-        # max_energy_exc = max([self._energy[task_id] for task_id in self.hypergraph.prev(self.current_task.id)]) if \
-        #     len(self.hypergraph.prev(self.current_task.id)) > 0 else 0
-
-        # print(f"任务{self.current_task.id}的完成时间", self.end_time, max_end_time_exc,
-        #       self._max_time[self.current_task.id],
-        #       self.energy / self._max_energy[self.current_task.id])
-
-        # 由于我们希望卸载时间和能耗越小越好，所以reward与时间和能耗成反比，即时奖励定义为两次状态的增益
-        # add_time = min_max_normalization(max(self.end_time - max_end_time_exc, 0), self.max_total_time,
-        #                                  self.min_total_time)
         add_time = self.end_time - max_end_time_exc
         add_energy = self.energy - max_energy_exc
         _reward = self._time_weight * TIME_BENCHMARK_DIMENSION_WEIGHT * add_time + self._energy_weight * ENERGY_BENCHMARK_DIMENSION_WEIGHT * add_energy
@@ -396,10 +322,6 @@ class OffloadingEnvironment(gym.Env):
 
         self._current_task, self._terminated = hypergraph.next_node(self.current_task)
         self._acts[self.current_task.id] = 0
-        # fixed_idx = NUM_HG * NUM_HG_EDGES + action * 3 if self.use_graph_state else action * 3
-        # _state[task_topsort_id, fixed_idx] = 1
-        # _state[task_topsort_id, -2:] = torch.tensor((add_time, add_energy), dtype=torch.float64)
-        # print(add_time, add_energy, _reward)
         return _state, _reward
 
     def render(self, mode=""):
@@ -411,9 +333,6 @@ class OffloadingEnvironment(gym.Env):
 
 def make_env(task_name, training_paths=None, test_paths=None, gnn_type=None, use_graph_state=False,
              device="cpu", use_cache=False, time_weight=REWARD_WEIGHT["time"], energy_weight=REWARD_WEIGHT["energy"]):
-    """创建训练集，测试集的环境，为节省内存，资源池采取单例模式，资源池只读
-    :return: 单个环境样例（用于获取动作空间，状态空间），训练集环境，测试集环境
-    """
 
     def _select_env(hypergraph: Hypergraph, time_weight=REWARD_WEIGHT["time"], energy_weight=REWARD_WEIGHT["energy"]):
         env = OffloadingEnvironment(resources, hypergraph, gnn_type, device, use_graph_state, time_weight=time_weight,
@@ -434,7 +353,6 @@ def make_env(task_name, training_paths=None, test_paths=None, gnn_type=None, use
     if use_cache:
         if os.path.exists(train_cache_path):
             with open(train_cache_path, "rb") as file:
-                # 反序列化
                 serialized_file = pickle.load(file)
                 train_envs = dill.loads(serialized_file)
         if os.path.exists(test_cache_path):
@@ -444,16 +362,13 @@ def make_env(task_name, training_paths=None, test_paths=None, gnn_type=None, use
 
     if training_paths and train_envs is None:
         train_hgs = HypergraphData(training_paths)
-        """需要注意，这里必须使用默认参数_hypergraph捕获临时变量，否则创建的多个环境都将会指向最后一个引用"""
         train_envs = DummyVectorEnv(
             [lambda _hypergraph=hypergraph: _select_env(hypergraph=_hypergraph, time_weight=time_weight, energy_weight=energy_weight) for hypergraph in train_hgs])
         with open(train_cache_path, "wb") as file:
-            # 序列化
             serialized_file = dill.dumps(train_envs)
             pickle.dump(serialized_file, file)
 
     if test_paths and test_envs is None:
-        # print(test_paths)
         test_hgs = HypergraphData(test_paths)
         test_envs = DummyVectorEnv(
             [lambda _hypergraph=hypergraph: _select_env(hypergraph=_hypergraph) for hypergraph in test_hgs.hypergraphs])

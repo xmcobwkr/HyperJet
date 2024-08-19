@@ -60,20 +60,13 @@ class MyLogger:
     def __init__(self, log_file='../logs/run.log'):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
-
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-
-        # 创建一个文件处理器，将日志写入文件
         file_handler = logging.FileHandler(log_file)
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(formatter)
-
-        # 创建一个控制台处理器，将日志打印到控制台
         console_handler = logging.StreamHandler()
         console_handler.setLevel(logging.DEBUG)
         console_handler.setFormatter(formatter)
-
-        # 将处理器添加到logger中
         self.logger.addHandler(file_handler)
         self.logger.addHandler(console_handler)
 

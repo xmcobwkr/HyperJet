@@ -73,7 +73,6 @@ class EnvCollector(Collector):
         episode_lens = []
         episode_start_indices = []
 
-        # add_attribute （每个环境的单步时延增量，能耗增量，总时延，总能耗，act的分布）
         step_time = []
         step_energy = []
         episode_time = []
