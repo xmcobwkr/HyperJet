@@ -184,7 +184,6 @@ class EnvCollector(Collector):
                 for i in env_ind_local:
                     self._reset_state(i)
 
-                # 增加统计信息
                 env_infos = info[env_ind_local]
                 for env_info in env_infos:
                     step_time.append(np.mean(env_info["step_time"]))

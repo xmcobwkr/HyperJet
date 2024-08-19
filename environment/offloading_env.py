@@ -30,20 +30,11 @@ class OffloadingEnvironment(gym.Env):
     def __init__(self, resources: Resources, hypergraph: Hypergraph, gnn_type=None, device=None, use_graph_state=False,
                  time_weight=REWARD_WEIGHT["time"], energy_weight=REWARD_WEIGHT["energy"]):
         super(OffloadingEnvironment, self).__init__()
-        # 初始化环境
-        # self._min_exec_time = None
-        # self._min_total_time = None
-        # self._max_total_time = None
-        # self._min_time = None
-        # self._max_energy = None
-        # self._max_exec_time = None
         self._dl_time = {}
         self._up_time = {}
         self._dl_energy = {}
         self._up_energy = {}
         self._HG = None
-        # self._min_energy = None
-        # self._max_time = None
         self._init_state = None
         self._state = None
         self.use_graph_state = use_graph_state
@@ -80,7 +71,6 @@ class OffloadingEnvironment(gym.Env):
 
     @property
     def state(self):
-        """返回观察到的状态"""
         return self._state
 
     @property
@@ -94,9 +84,7 @@ class OffloadingEnvironment(gym.Env):
             m = total_edges + NUM_RESOURCE_CLUSTER * 2 + 8
             _state = np.zeros((n, m))
             incidence_matrix = self.hypergraph.incidence_matrix
-            p, _= incidence_matrix.shape
-            # if self.use_graph_state:
-            #     _state[:min(n, p), :min(m, q)] = incidence_matrix[:min(n, p), :min(m, q)]
+            p, _ = incidence_matrix.shape
 
             for i in range(min(n, p)):
                 _task = self.hypergraph.task_sequence[i]
@@ -207,8 +195,6 @@ class OffloadingEnvironment(gym.Env):
     @property
     def min_available_time_resource(self):
         return np.argmin(self._resource_available_time)
-        # last_column = [row[-1] for row in self._resource_available_time]
-        # return last_column.index(min(last_column))
 
 
     def reset(self, seed=None, options=None):

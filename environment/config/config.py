@@ -31,7 +31,6 @@ for k, v in zip(USE_HG_EDGE, HG_EDGE_NUM):
 GRAPH_STATE_TYPE = "HG"
 EXP = None
 
-# 训练相关
 EMBED_SIZE = 64
 BATCH_SIZE = 16
 EPOCH = 300
