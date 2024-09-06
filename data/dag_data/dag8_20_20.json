@@ -1,0 +1,367 @@
+{
+    "nodes": [
+        {
+            "id": "5",
+            "input_data_size": 388494753,
+            "output_data_size": 18347667,
+            "task_constant": 7,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "10",
+            "input_data_size": 262947891,
+            "output_data_size": 9603364,
+            "task_constant": 3,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "2",
+            "input_data_size": 406480103,
+            "output_data_size": 407557040,
+            "task_constant": 4,
+            "init_resource_id": -1,
+            "task_complexity": 1
+        },
+        {
+            "id": "3",
+            "input_data_size": 306685323,
+            "output_data_size": 21600935,
+            "task_constant": 1,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "11",
+            "input_data_size": 278209648,
+            "output_data_size": 27568491,
+            "task_constant": 4,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "6",
+            "input_data_size": 101657236,
+            "output_data_size": 128799531,
+            "task_constant": 3,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "20",
+            "input_data_size": 242272233,
+            "output_data_size": 374612585,
+            "task_constant": 2,
+            "init_resource_id": -1,
+            "task_complexity": 1
+        },
+        {
+            "id": "4",
+            "input_data_size": 330337253,
+            "output_data_size": 375743154,
+            "task_constant": 8,
+            "init_resource_id": -1,
+            "task_complexity": 1
+        },
+        {
+            "id": "19",
+            "input_data_size": 323227566,
+            "output_data_size": 304562786,
+            "task_constant": 8,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "17",
+            "input_data_size": 277879538,
+            "output_data_size": 275191750,
+            "task_constant": 9,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "16",
+            "input_data_size": 223270060,
+            "output_data_size": 31521721,
+            "task_constant": 6,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "14",
+            "input_data_size": 381705101,
+            "output_data_size": 158869315,
+            "task_constant": 9,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "13",
+            "input_data_size": 324958474,
+            "output_data_size": 100968704,
+            "task_constant": 1,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "12",
+            "input_data_size": 219802209,
+            "output_data_size": 335324533,
+            "task_constant": 2,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "1",
+            "input_data_size": 192495137,
+            "output_data_size": 385581825,
+            "task_constant": 6,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "7",
+            "input_data_size": 361056090,
+            "output_data_size": 342910673,
+            "task_constant": 9,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "18",
+            "input_data_size": 387760371,
+            "output_data_size": 57487970,
+            "task_constant": 4,
+            "init_resource_id": -1,
+            "task_complexity": 1
+        },
+        {
+            "id": "9",
+            "input_data_size": 129082130,
+            "output_data_size": 281313232,
+            "task_constant": 3,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "15",
+            "input_data_size": 50723319,
+            "output_data_size": 227047495,
+            "task_constant": 0,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "8",
+            "input_data_size": 370560822,
+            "output_data_size": 51743518,
+            "task_constant": 3,
+            "init_resource_id": -1,
+            "task_complexity": 1
+        }
+    ],
+    "bandwidth_type": 1,
+    "edges": [
+        {
+            "nodes": [
+                10,
+                11
+            ],
+            "source": 10,
+            "target": 11,
+            "e_weight": 20,
+            "type": 1
+        },
+        {
+            "nodes": [
+                5,
+                6
+            ],
+            "source": 5,
+            "target": 6,
+            "e_weight": 11,
+            "type": 1
+        },
+        {
+            "nodes": [
+                4,
+                20
+            ],
+            "source": 4,
+            "target": 20,
+            "e_weight": 19,
+            "type": 1
+        },
+        {
+            "nodes": [
+                19,
+                20
+            ],
+            "source": 19,
+            "target": 20,
+            "e_weight": 15,
+            "type": 1
+        },
+        {
+            "nodes": [
+                16,
+                17
+            ],
+            "source": 16,
+            "target": 17,
+            "e_weight": 14,
+            "type": 1
+        },
+        {
+            "nodes": [
+                12,
+                13
+            ],
+            "source": 12,
+            "target": 13,
+            "e_weight": 14,
+            "type": 1
+        },
+        {
+            "nodes": [
+                10,
+                1
+            ],
+            "source": 10,
+            "target": 1,
+            "e_weight": 18,
+            "type": 1
+        },
+        {
+            "nodes": [
+                6,
+                7
+            ],
+            "source": 6,
+            "target": 7,
+            "e_weight": 19,
+            "type": 1
+        },
+        {
+            "nodes": [
+                11,
+                12
+            ],
+            "source": 11,
+            "target": 12,
+            "e_weight": 10,
+            "type": 1
+        },
+        {
+            "nodes": [
+                17,
+                18
+            ],
+            "source": 17,
+            "target": 18,
+            "e_weight": 15,
+            "type": 1
+        },
+        {
+            "nodes": [
+                13,
+                18
+            ],
+            "source": 13,
+            "target": 18,
+            "e_weight": 18,
+            "type": 1
+        },
+        {
+            "nodes": [
+                7,
+                18
+            ],
+            "source": 7,
+            "target": 18,
+            "e_weight": 17,
+            "type": 1
+        },
+        {
+            "nodes": [
+                9,
+                18
+            ],
+            "source": 9,
+            "target": 18,
+            "e_weight": 15,
+            "type": 1
+        },
+        {
+            "nodes": [
+                15,
+                18
+            ],
+            "source": 15,
+            "target": 18,
+            "e_weight": 12,
+            "type": 1
+        },
+        {
+            "nodes": [
+                14,
+                15
+            ],
+            "source": 14,
+            "target": 15,
+            "e_weight": 12,
+            "type": 1
+        },
+        {
+            "nodes": [
+                18,
+                19
+            ],
+            "source": 18,
+            "target": 19,
+            "e_weight": 12,
+            "type": 1
+        },
+        {
+            "nodes": [
+                8,
+                9
+            ],
+            "source": 8,
+            "target": 9,
+            "e_weight": 19,
+            "type": 1
+        },
+        {
+            "nodes": [
+                2,
+                4
+            ],
+            "source": 2,
+            "target": 4,
+            "e_weight": 10,
+            "type": 1
+        },
+        {
+            "nodes": [
+                3,
+                4
+            ],
+            "source": 3,
+            "target": 4,
+            "e_weight": 14,
+            "type": 1
+        },
+        {
+            "nodes": [
+                1,
+                4
+            ],
+            "source": 1,
+            "target": 4,
+            "e_weight": 18,
+            "type": 1
+        }
+    ]
+}

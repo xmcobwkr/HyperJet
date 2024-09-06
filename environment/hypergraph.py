@@ -11,7 +11,7 @@ import heapq
 import numpy as np
 
 from environment.resource import Resources, resources
-from utils.utils import CustomException, topsort_with_time_and_energy, DisablePrint
+from utils.utils import CustomException, topsort_with_time_and_energy, DisablePrint, RedirectOutput
 from .config.config import *
 
 
@@ -294,7 +294,7 @@ class Hypergraph():
         if k == 0:
             return res
         for next_task_id in self.prev(task_id):
-            res.union(self.get_k_neighborhood(next_task_id, k - 1))
+            res = res.union(self.get_k_neighborhood(next_task_id, k - 1))
         return res
 
     def generate_hyperedges(self, neighborhood_k=2, kmeans_k=NUM_EDGE_CLUSTER, partitioning_k=NUM_EDGE_CLUSTER, partitioning_config=PARTITIONING_CONFIG):

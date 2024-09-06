@@ -1,0 +1,34 @@
+{
+  "nodes":[{
+    "id": 1,
+    "input_data_size": 1024,
+    "output_data_size": 1024,
+    "task_complexity": 1,
+    "task_constant": 0,
+    "init_resource_id": -1
+  }, {
+    "id": 2,
+    "input_data_size": 1024,
+    "output_data_size": 1024,
+    "task_complexity": 1,
+    "task_constant": 0,
+    "init_resource_id": -1
+  }, {
+    "id": 3,
+    "input_data_size": 1024,
+    "output_data_size": 1024,
+    "task_complexity": 1,
+    "task_constant": 0,
+    "init_resource_id": -1
+  }],
+  "edges": [
+    {
+      "nodes": [1, 2],
+      "source": 1,
+      "target": 2,
+      "e_weight": 0,
+      "type": 1
+    }
+  ],
+  "bandwidth_type": 0
+}

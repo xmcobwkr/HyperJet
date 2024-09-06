@@ -1,0 +1,407 @@
+{
+    "nodes": [
+        {
+            "id": "10",
+            "input_data_size": 94263296,
+            "output_data_size": 335010792,
+            "task_constant": 6,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "6",
+            "input_data_size": 236955576,
+            "output_data_size": 121499564,
+            "task_constant": 7,
+            "init_resource_id": -1,
+            "task_complexity": 1
+        },
+        {
+            "id": "3",
+            "input_data_size": 73453673,
+            "output_data_size": 128498215,
+            "task_constant": 3,
+            "init_resource_id": -1,
+            "task_complexity": 1
+        },
+        {
+            "id": "4",
+            "input_data_size": 29052652,
+            "output_data_size": 393930910,
+            "task_constant": 7,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "5",
+            "input_data_size": 31570729,
+            "output_data_size": 258197794,
+            "task_constant": 8,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "14",
+            "input_data_size": 29817839,
+            "output_data_size": 342622480,
+            "task_constant": 8,
+            "init_resource_id": -1,
+            "task_complexity": 1
+        },
+        {
+            "id": "12",
+            "input_data_size": 86261889,
+            "output_data_size": 392701703,
+            "task_constant": 8,
+            "init_resource_id": -1,
+            "task_complexity": 1
+        },
+        {
+            "id": "13",
+            "input_data_size": 316511608,
+            "output_data_size": 302073976,
+            "task_constant": 9,
+            "init_resource_id": -1,
+            "task_complexity": 1
+        },
+        {
+            "id": "18",
+            "input_data_size": 229009242,
+            "output_data_size": 354645941,
+            "task_constant": 9,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "16",
+            "input_data_size": 353032241,
+            "output_data_size": 259808656,
+            "task_constant": 4,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "17",
+            "input_data_size": 83120994,
+            "output_data_size": 184350438,
+            "task_constant": 8,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "7",
+            "input_data_size": 32962749,
+            "output_data_size": 174358575,
+            "task_constant": 3,
+            "init_resource_id": -1,
+            "task_complexity": 1
+        },
+        {
+            "id": "11",
+            "input_data_size": 373259642,
+            "output_data_size": 309367798,
+            "task_constant": 7,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "8",
+            "input_data_size": 214052908,
+            "output_data_size": 190589689,
+            "task_constant": 6,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "1",
+            "input_data_size": 362111544,
+            "output_data_size": 357303177,
+            "task_constant": 8,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "9",
+            "input_data_size": 317007530,
+            "output_data_size": 231294909,
+            "task_constant": 0,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "20",
+            "input_data_size": 11164710,
+            "output_data_size": 176649346,
+            "task_constant": 3,
+            "init_resource_id": -1,
+            "task_complexity": 1
+        },
+        {
+            "id": "2",
+            "input_data_size": 348901350,
+            "output_data_size": 159414753,
+            "task_constant": 6,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "19",
+            "input_data_size": 172714756,
+            "output_data_size": 67125904,
+            "task_constant": 2,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        },
+        {
+            "id": "15",
+            "input_data_size": 352511581,
+            "output_data_size": 204582263,
+            "task_constant": 0,
+            "init_resource_id": -1,
+            "task_complexity": 2
+        }
+    ],
+    "bandwidth_type": 1,
+    "edges": [
+        {
+            "nodes": [
+                3,
+                6
+            ],
+            "source": 3,
+            "target": 6,
+            "e_weight": 15,
+            "type": 1
+        },
+        {
+            "nodes": [
+                4,
+                6
+            ],
+            "source": 4,
+            "target": 6,
+            "e_weight": 20,
+            "type": 1
+        },
+        {
+            "nodes": [
+                5,
+                6
+            ],
+            "source": 5,
+            "target": 6,
+            "e_weight": 16,
+            "type": 1
+        },
+        {
+            "nodes": [
+                12,
+                14
+            ],
+            "source": 12,
+            "target": 14,
+            "e_weight": 10,
+            "type": 1
+        },
+        {
+            "nodes": [
+                13,
+                14
+            ],
+            "source": 13,
+            "target": 14,
+            "e_weight": 15,
+            "type": 1
+        },
+        {
+            "nodes": [
+                16,
+                18
+            ],
+            "source": 16,
+            "target": 18,
+            "e_weight": 20,
+            "type": 1
+        },
+        {
+            "nodes": [
+                17,
+                18
+            ],
+            "source": 17,
+            "target": 18,
+            "e_weight": 12,
+            "type": 1
+        },
+        {
+            "nodes": [
+                6,
+                7
+            ],
+            "source": 6,
+            "target": 7,
+            "e_weight": 10,
+            "type": 1
+        },
+        {
+            "nodes": [
+                10,
+                11
+            ],
+            "source": 10,
+            "target": 11,
+            "e_weight": 19,
+            "type": 1
+        },
+        {
+            "nodes": [
+                3,
+                4
+            ],
+            "source": 3,
+            "target": 4,
+            "e_weight": 15,
+            "type": 1
+        },
+        {
+            "nodes": [
+                12,
+                4
+            ],
+            "source": 12,
+            "target": 4,
+            "e_weight": 16,
+            "type": 1
+        },
+        {
+            "nodes": [
+                11,
+                12
+            ],
+            "source": 11,
+            "target": 12,
+            "e_weight": 11,
+            "type": 1
+        },
+        {
+            "nodes": [
+                18,
+                8
+            ],
+            "source": 18,
+            "target": 8,
+            "e_weight": 10,
+            "type": 1
+        },
+        {
+            "nodes": [
+                6,
+                1
+            ],
+            "source": 6,
+            "target": 1,
+            "e_weight": 15,
+            "type": 1
+        },
+        {
+            "nodes": [
+                8,
+                9
+            ],
+            "source": 8,
+            "target": 9,
+            "e_weight": 15,
+            "type": 1
+        },
+        {
+            "nodes": [
+                7,
+                20
+            ],
+            "source": 7,
+            "target": 20,
+            "e_weight": 14,
+            "type": 1
+        },
+        {
+            "nodes": [
+                2,
+                20
+            ],
+            "source": 2,
+            "target": 20,
+            "e_weight": 11,
+            "type": 1
+        },
+        {
+            "nodes": [
+                19,
+                20
+            ],
+            "source": 19,
+            "target": 20,
+            "e_weight": 19,
+            "type": 1
+        },
+        {
+            "nodes": [
+                1,
+                2
+            ],
+            "source": 1,
+            "target": 2,
+            "e_weight": 10,
+            "type": 1
+        },
+        {
+            "nodes": [
+                18,
+                19
+            ],
+            "source": 18,
+            "target": 19,
+            "e_weight": 15,
+            "type": 1
+        },
+        {
+            "nodes": [
+                9,
+                19
+            ],
+            "source": 9,
+            "target": 19,
+            "e_weight": 15,
+            "type": 1
+        },
+        {
+            "nodes": [
+                14,
+                16
+            ],
+            "source": 14,
+            "target": 16,
+            "e_weight": 20,
+            "type": 1
+        },
+        {
+            "nodes": [
+                13,
+                16
+            ],
+            "source": 13,
+            "target": 16,
+            "e_weight": 17,
+            "type": 1
+        },
+        {
+            "nodes": [
+                15,
+                16
+            ],
+            "source": 15,
+            "target": 16,
+            "e_weight": 17,
+            "type": 1
+        }
+    ]
+}

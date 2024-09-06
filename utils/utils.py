@@ -4,8 +4,7 @@ from scipy.interpolate import interp1d
 import sys
 import os
 
-from environment.config.config import MS2S, CUDA_VISIBLE_DEVICES, TIME_BENCHMARK_DIMENSION_WEIGHT, \
-    ENERGY_BENCHMARK_DIMENSION_WEIGHT
+from environment.config.config import *
 
 
 def get_gpu():
@@ -26,6 +25,32 @@ def get_transmission_info(task):
     upload_time, download_time = get_transmission_time(task)
     upload_energy, download_energy = upload_time * task.load_energy_coefficient, download_time * task.load_energy_coefficient
     return upload_time, download_time, upload_energy, download_energy
+
+def get_file_paths(max_training_paths=NUM_HG * NUM_TRAIN_HG, max_test_paths=NUM_HG * NUM_TEST_HG, min_task_num=NUM_HG_TASKS-5,
+                   max_task_num=NUM_HG_TASKS):
+    training_paths = []
+    test_paths = []
+    import re
+    paths = []
+    for filename in os.listdir(DATASET_PATH):
+        match = re.search(r'_(\d+)_(\d+)', filename)
+        if match:
+            node_num = int(match.group(1))
+            edge_num = int(match.group(2))
+            if filename.endswith('.json') and min_task_num < node_num <= max_task_num and min_task_num <= edge_num <= max_task_num + 10:
+                file_path = os.path.join(DATASET_PATH, filename)
+                paths.append((node_num, edge_num, file_path))
+                if len(paths) >= max_training_paths + max_test_paths:
+                    break
+
+    paths = sorted(paths, key=lambda x: (-x[0], -x[1]))
+
+    for i, (node_num, edge_num, file_path) in enumerate(paths):
+        if i < max_training_paths:
+            training_paths.append(file_path)
+        else:
+            test_paths.append(file_path)
+    return training_paths, test_paths
 
 
 def min_max_normalization(x, max_value, min_value):
@@ -91,27 +116,44 @@ def topsort_with_time_and_energy(id2tasks, edges, resources):
                 heapq.heappush(heap, (- min_rew[v], v))
     return max_rew, min_rew, task_sequence
 
-# 定义DisablePrint类
 class DisablePrint:
     def __enter__(self):
         pass
-        # self._original_stdout = sys.stdout
-        # self._original_stderr = sys.stderr
-        # self._original_stdout_fd = os.dup(1)
-        # self._original_stderr_fd = os.dup(2)
-        # sys.stdout = open(os.devnull, 'w')
-        # sys.stderr = open(os.devnull, 'w')
-        # os.dup2(os.open(os.devnull, os.O_WRONLY), 1)
-        # os.dup2(os.open(os.devnull, os.O_WRONLY), 2)
+        self._original_stdout = sys.stdout
+        self._original_stderr = sys.stderr
+        self._original_stdout_fd = os.dup(1)
+        self._original_stderr_fd = os.dup(2)
+        sys.stdout = open(os.devnull, 'w')
+        sys.stderr = open(os.devnull, 'w')
+        os.dup2(os.open(os.devnull, os.O_WRONLY), 1)
+        os.dup2(os.open(os.devnull, os.O_WRONLY), 2)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass
-        # os.dup2(self._original_stdout_fd, 1)
-        # os.dup2(self._original_stderr_fd, 2)
-        # sys.stdout.close()
-        # sys.stderr.close()
-        # sys.stdout = self._original_stdout
-        # sys.stderr = self._original_stderr
+        os.dup2(self._original_stdout_fd, 1)
+        os.dup2(self._original_stderr_fd, 2)
+        sys.stdout.close()
+        sys.stderr.close()
+        sys.stdout = self._original_stdout
+        sys.stderr = self._original_stderr
+
+class RedirectOutput:
+    def __init__(self, stdout_path, stderr_path):
+        self.stdout_path = stdout_path
+        self.stderr_path = stderr_path
+        self.stdout_old = sys.stdout
+        self.stderr_old = sys.stderr
+
+    def __enter__(self):
+        sys.stdout = open(self.stdout_path, 'w')
+        sys.stderr = open(self.stderr_path, 'w')
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stderr.close()
+        sys.stdout = self.stdout_old
+        sys.stderr = self.stderr_old
+
 
 
 def test_exp():

@@ -1,0 +1,10 @@
+tianshou~=0.5.1
+gym
+dhg~=0.9.3
+numpy~=1.26.3
+torch~=1.13.1
+gymnasium~=0.29.1
+kahypar~=1.3.5
+tqdm~=4.66.1
+scikit-learn~=1.4.0
+dill~=0.3.8

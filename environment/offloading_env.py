@@ -350,6 +350,8 @@ def make_env(task_name, training_paths=None, test_paths=None, gnn_type=None, use
         train_hgs = HypergraphData(training_paths)
         train_envs = DummyVectorEnv(
             [lambda _hypergraph=hypergraph: _select_env(hypergraph=_hypergraph, time_weight=time_weight, energy_weight=energy_weight) for hypergraph in train_hgs])
+        if not os.path.exists(train_cache_path):
+            os.makedirs(os.path.dirname(train_cache_path), exist_ok=True)
         with open(train_cache_path, "wb") as file:
             serialized_file = dill.dumps(train_envs)
             pickle.dump(serialized_file, file)
@@ -358,6 +360,8 @@ def make_env(task_name, training_paths=None, test_paths=None, gnn_type=None, use
         test_hgs = HypergraphData(test_paths)
         test_envs = DummyVectorEnv(
             [lambda _hypergraph=hypergraph: _select_env(hypergraph=_hypergraph) for hypergraph in test_hgs.hypergraphs])
+        if not os.path.exists(test_cache_path):
+            os.makedirs(os.path.dirname(test_cache_path), exist_ok=True)
         with open(test_cache_path, "wb") as file:
             serialized_file = dill.dumps(train_envs)
             pickle.dump(serialized_file, file)
