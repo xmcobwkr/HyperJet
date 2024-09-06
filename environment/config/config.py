@@ -1,5 +1,3 @@
-from importlib.resources import Resource
-
 from math import log
 
 import numpy as np

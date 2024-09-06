@@ -1,20 +1,16 @@
-import heapq
-import os
 import pickle
 from os import path
 
 import dill as dill
 import gymnasium as gym
-import torch
 from gymnasium.spaces import Box, Discrete
 from tianshou.env import DummyVectorEnv
 
 from environment.hypergraph import Hypergraph, HypergraphData
 from environment.resource import Resources, resources
-from .config.config import *
+from environment.config.config import *
 from utils.utils import *
 
-from utils.utils import CustomException
 
 
 def _get_transmission_time(task):
@@ -248,7 +244,6 @@ class OffloadingEnvironment(gym.Env):
 
     def _offloading_computation(self, task, action):
         hypergraph, resources = self.hypergraph, self.resources
-        # 获取时延，能耗
         exec_time = resources.get_time(task, action)
         exec_energy = resources.get_energy(task, action)
         self._exec_time[task.id] = exec_time

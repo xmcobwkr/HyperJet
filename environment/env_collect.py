@@ -3,8 +3,6 @@ import warnings
 from typing import Any, Callable, Dict, Optional, Union
 from random import sample
 import gymnasium as gym
-import numpy as np
-import torch
 from tianshou.data import (
     Batch,
     to_numpy,
@@ -14,7 +12,6 @@ from tianshou.env import BaseVectorEnv
 from tianshou.policy import BasePolicy
 
 from .config.config import *
-from .resource import resources
 
 
 class EnvCollector(Collector):

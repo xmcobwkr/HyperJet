@@ -1,17 +1,14 @@
-import heapq
 import json
 import os
 import random
-from collections import deque, namedtuple
 from types import SimpleNamespace
 from tqdm import tqdm
 import kahypar
 import heapq
 
-import numpy as np
 
 from environment.resource import Resources, resources
-from utils.utils import CustomException, topsort_with_time_and_energy, DisablePrint, RedirectOutput
+from utils.utils import CustomException, topsort_with_time_and_energy, DisablePrint
 from .config.config import *
 
 
